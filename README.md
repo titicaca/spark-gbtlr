@@ -1,4 +1,4 @@
-# Saprk-GBTLR
+# Spark-GBTLR
 
 GBTLRClassifier is a hybrid model of Gradient Boosting Trees and Logistic Regression. 
 It is quite practical and popular in many data mining competitions.
@@ -7,7 +7,7 @@ The output of each individual tree is treated as a categorical input feature to 
 Boosted decision trees prove to be very powerful feature transforms.
 
 Model details about GBTLR can be found in the following paper:
-<a href="https://dl.acm.org/citation.cfm?id=2648589">Practical Lessons from Predicting Clicks on Ads at Facebook</a> [1]
+<a href="https://dl.acm.org/citation.cfm?id=2648589">Practical Lessons from Predicting Clicks on Ads at Facebook</a> [1].
 
 GBTLRClassifier on Spark is designed and implemented by combining GradientBoostedTrees and Logistic Regressor in 
 Spark MLlib. Features are firstly trained and transformed into sparse vectors via GradientBoostedTrees, and then
@@ -75,7 +75,7 @@ def main(args: Array[String]): Unit = {
 
 
 ## Benchmark
-TO BE ADDED
+TO BE ADDED..
 
 ## Requirements
 
