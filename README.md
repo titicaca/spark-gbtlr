@@ -1,4 +1,7 @@
 # Spark-GBTLR
+[![Build Status](https://travis-ci.org/titicaca/spark-gbtlr.svg?branch=master)](https://travis-ci.org/titicaca/spark-gbtlr)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 
 GBTLRClassifier is a hybrid model of Gradient Boosting Trees and Logistic Regression. 
 It is quite practical and popular in many data mining competitions.

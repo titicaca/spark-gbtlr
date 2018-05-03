@@ -136,26 +136,27 @@ class GBTLRClassifierSuite extends SparkFunSuite with MLlibTestSparkContext with
     assert(model.getRules.length === totalLeafNodes)
   }
 
-  test("read/write") {
-
-    def checkModelData(model1: GBTLRClassificationModel, model2: GBTLRClassificationModel): Unit = {
-      assert(model1.gbtModel.algo === model2.gbtModel.algo)
-      try {
-        model1.gbtModel.trees.zip(model2.gbtModel.trees).foreach {
-          case (tree1, tree2) => checkModelEqual(tree1, tree2)
-        }
-        assert(model1.gbtModel.treeWeights === model2.gbtModel.treeWeights)
-      } catch {
-        case ex: Exception =>
-          throw new AssertionError("checkModelData failed since " +
-              "the two gbtModels were not identical.\n")
-      }
-      assert(model1.lrModel.intercept === model2.lrModel.intercept)
-      assert(model1.lrModel.coefficients.toArray === model2.lrModel.coefficients.toArray)
-      assert(model1.lrModel.numFeatures === model2.lrModel.numFeatures)
-      assert(model1.lrModel.numClasses === model2.lrModel.numClasses)
-    }
-
+// Uncomment to run GBTLRClassificationModel read / write tests
+//  test("read/write") {
+//
+//    def checkModelData(model1: GBTLRClassificationModel, model2: GBTLRClassificationModel): Unit = {
+//      assert(model1.gbtModel.algo === model2.gbtModel.algo)
+//      try {
+//        model1.gbtModel.trees.zip(model2.gbtModel.trees).foreach {
+//          case (tree1, tree2) => checkModelEqual(tree1, tree2)
+//        }
+//        assert(model1.gbtModel.treeWeights === model2.gbtModel.treeWeights)
+//      } catch {
+//        case ex: Exception =>
+//          throw new AssertionError("checkModelData failed since " +
+//              "the two gbtModels were not identical.\n")
+//      }
+//      assert(model1.lrModel.intercept === model2.lrModel.intercept)
+//      assert(model1.lrModel.coefficients.toArray === model2.lrModel.coefficients.toArray)
+//      assert(model1.lrModel.numFeatures === model2.lrModel.numFeatures)
+//      assert(model1.lrModel.numClasses === model2.lrModel.numClasses)
+//    }
+//
 //    val gBTLRClassifier = new GBTLRClassifier()
 //    testEstimatorAndModelReadWrite(
 //      gBTLRClassifier, dataset,
@@ -163,7 +164,7 @@ class GBTLRClassifierSuite extends SparkFunSuite with MLlibTestSparkContext with
 //      GBTLRClassifierSuite.allParamSettings,
 //      checkModelData
 //    )
-  }
+//  }
 
   /**
     * Return true iff the two nodes and their descendents are exactly the same.
