@@ -11,6 +11,7 @@ import org.apache.spark.ml.classification._
 import org.apache.spark.ml.linalg.{Vector, Vectors}
 import org.apache.spark.ml.param._
 import org.apache.spark.ml.util._
+import org.apache.spark.ml.util.Instrumentation.instrumented
 import org.apache.spark.mllib.linalg.{DenseVector => OldDenseVector}
 import org.apache.spark.mllib.regression.{LabeledPoint => OldLabeledPoint}
 import org.apache.spark.mllib.tree.configuration.{FeatureType, Algo => OldAlgo, BoostingStrategy => OldBoostingStrategy, Strategy => OldStrategy}
@@ -672,7 +673,7 @@ class GBTLRClassifier (override val uid: String)
     * @param dataset Input data.
     * @return GBTLRClassification model.
     */
-  override def train(dataset: Dataset[_]): GBTLRClassificationModel = {
+  override def train(dataset: Dataset[_]): GBTLRClassificationModel = instrumented { instr =>
     val categoricalFeatures: Map[Int, Int] =
       getCategoricalFeatures(dataset.schema($(featuresCol)))
 
@@ -691,10 +692,11 @@ class GBTLRClassifier (override val uid: String)
     val boostingStrategy = new OldBoostingStrategy(strategy, getOldLossType,
       getGBTMaxIter, getStepSize)
 
-    val instr = Instrumentation.create(this, oldDataset)
-    instr.logParams(params: _*)
+    instr.logPipelineStage(this)
     instr.logNumFeatures(numFeatures)
     instr.logNumClasses(2)
+    instr.logDataset(dataset)
+    instr.logParams(this)
 
     // train a gradient boosted tree model using boostingStrategy.
     val gbtModel = GradientBoostedTrees.train(oldDataset, boostingStrategy)
@@ -737,7 +739,6 @@ class GBTLRClassifier (override val uid: String)
     val summary = new GBTLRClassifierTrainingSummary(datasetWithCombinedFeatures, lrModel.summary,
       gbtModel.trees, gbtModel.treeWeights)
     model.setSummary(Some(summary))
-    instr.logSuccess(model)
     model
   }
 
@@ -927,7 +928,7 @@ object GBTLRClassificationModel extends MLReadable[GBTLRClassificationModel] {
       val gbtModel = GradientBoostedTreesModel.load(sc, gbtDataPath)
       val lrModel = LogisticRegressionModel.load(lrDataPath)
       val model = new GBTLRClassificationModel(metadata.uid, gbtModel, lrModel)
-      DefaultParamsReader.getAndSetParams(model, metadata)
+      metadata.getAndSetParams(model)
       model
     }
   }
